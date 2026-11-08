@@ -35,9 +35,36 @@ UITexture *Load_Texture(FrameBuf *screen, const char *folder, const char *name)
 				folder, gResolutions[i].path_suffix, name, gResolutions[i].file_suffix);
 		SDL_Surface *surface = SDL_LoadSurface_IO(OpenRead(file), true);
 		if (surface) {
+			float visualScale = gResolutions[i].scale;
+			// Personal edition: opt-in title artwork only. Original collision
+			// surfaces, CRCs, sprites and logical layout remain untouched.
+			if (SDL_GetHintBoolean("MAELSTROM_MODERN_ART", false) &&
+			    !SDL_GetHintBoolean("MAELSTROM_CLASSIC_ART", false) &&
+			    SDL_strcmp(folder, "Images") == 0 &&
+			    SDL_strcmp(name, "Maelstrom_Titles#130") == 0) {
+				SDL_IOStream *input = OpenRead("PersonalArt/Images/Maelstrom_Titles#130.png");
+				SDL_Surface *modern = input ? SDL_LoadSurface_IO(input, true) : NULL;
+				if (modern) {
+					if (modern->w > surface->w && modern->h > surface->h &&
+					    modern->w <= 4096 && modern->h <= 4096 &&
+					    (Sint64)modern->w * surface->h == (Sint64)modern->h * surface->w) {
+						visualScale *= (float)modern->w / surface->w;
+						SDL_DestroySurface(surface);
+						surface = modern;
+					} else {
+						SDL_Log("Personal title has incompatible dimensions; using original");
+						SDL_DestroySurface(modern);
+					}
+				}
+			}
 			SDL_Texture *texture = screen->LoadImage(surface);
 			SDL_DestroySurface(surface);
-			return new UITexture(texture, gResolutions[i].scale);
+			// Personal edition: soften enlarged artwork without filtering bitmap text.
+			// Original asset bytes and gameplay dimensions remain unchanged.
+			if (texture && !SDL_GetHintBoolean("MAELSTROM_CLASSIC_ART", false)) {
+				SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_LINEAR);
+			}
+			return new UITexture(texture, visualScale);
 		}
 	}
 	return NULL;

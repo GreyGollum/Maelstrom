@@ -139,6 +139,8 @@ void PrintUsage(const char *progname)
 "    --windowed        # Run Maelstrom in windowed mode\n"
 "    --geometry WxH    # Set the window size to WxH\n"
 "    --control-brakes  # Allow manual brake control\n"
+"    --classic-art     # Personal edition: use original pixel-art scaling\n"
+"    --modern-art      # Personal edition: use optional modern title artwork\n"
 	);
 }
 
@@ -207,6 +209,11 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 			}
 		} else if ( strcmp(argv[i], "--control-brakes") == 0 ) {
 			gControlBrakes = true;
+		} else if ( strcmp(argv[i], "--modern-art") == 0 ) {
+			SDL_SetHint("MAELSTROM_MODERN_ART", "1");
+		} else if ( strcmp(argv[i], "--classic-art") == 0 ) {
+			// Personal edition; retain a reversible original-art presentation.
+			SDL_SetHint("MAELSTROM_CLASSIC_ART", "1");
 		} else if ( strcmp(argv[i], "-NSDocumentRevisionsDebugMode") == 0 && argv[i+1] ) {
 			// Ignore Xcode debug option
 			++i;
