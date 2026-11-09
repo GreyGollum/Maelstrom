@@ -1,0 +1,14 @@
+<Panel template="FramedPanel"><Elements>
+<Label template="LargeWhite" text="THE PEOPLE BEHIND MAELSTROM"><Anchor anchorFrom="TOP" anchorTo="CENTER" y="-176"/></Label>
+<Label template="MediumWhite" text="Original programming: Andrew Welch"><Anchor anchorFrom="TOP" anchorTo="CENTER" y="-130"/></Label>
+<Label template="MediumWhite" text="Animation artwork: Ian Gilman"><Anchor anchorFrom="TOP" anchorTo="CENTER" y="-103"/></Label>
+<Label template="MediumWhite" text="Title artwork: Mark W Lewis"><Anchor anchorFrom="TOP" anchorTo="CENTER" y="-76"/></Label>
+<Label template="MediumWhite" text="Port to SDL: Sam Lantinga"><Anchor anchorFrom="TOP" anchorTo="CENTER" y="-49"/></Label>
+<Label template="SmallBlue" text="WITH THANKS TO"><Anchor anchorFrom="TOP" anchorTo="CENTER" y="-4"/></Label>
+<Label template="SmallWhite" text="The original contributors and acknowledgments are preserved."><Anchor anchorFrom="TOP" anchorTo="CENTER" y="28"/></Label>
+<Label template="SmallBlue" text="Press O to view the full original credits"><Anchor anchorFrom="TOP" anchorTo="CENTER" y="59"/></Label>
+<Label template="SmallWhite" text="c1992-4 Ambrosia Software, Inc."><Anchor anchorFrom="TOP" anchorTo="CENTER" y="119"/></Label>
+<Label template="SmallBlue" text="Personal remaster - original credits and license retained"><Anchor anchorFrom="TOP" anchorTo="CENTER" y="141"/></Label>
+<Label template="SmallWhite" text="Press any key to return"><Anchor anchorFrom="TOP" anchorTo="CENTER" y="170"/></Label>
+<Button hotkey="any" clickPanel="main" clickSound="131"/><Button hotkey="O" clickPanel="original_credits"/>
+</Elements></Panel>

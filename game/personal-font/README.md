@@ -1,0 +1,1 @@
+stb_truetype from official nothings/stb, commit 6e9f34d5429cf16790ec43c9bac3f1ee4ad1f760. Original dual MIT/public-domain license retained in header. Only trusted bundled fonts supported; stb is not a sandbox for untrusted font input.

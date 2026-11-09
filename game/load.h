@@ -30,6 +30,7 @@ extern void Free_Texture(FrameBuf *screen, UITexture *texture);
 extern UITexture *Load_Image(FrameBuf *screen, const char *name);
 extern UITexture *Load_Title(FrameBuf *screen, int title_id);
 extern UITexture *GetCIcon(FrameBuf *screen, short id);
-extern UITexture *GetSprite(FrameBuf *screen, short id, bool large);
+extern void ResetPersonalSpriteSourceCache();
+extern UITexture *GetSprite(FrameBuf *screen, short id, bool large, SDL_Surface *originalSurface = NULL);
 
 #endif /* _load_h */

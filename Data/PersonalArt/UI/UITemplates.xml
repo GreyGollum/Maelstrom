@@ -1,0 +1,89 @@
+<UITemplates>
+	<Panel templateName="FramedPanel"><Elements>
+<Area fill="true"><FillColor r="14" g="20" b="30"/><Size w="526" h="398"/></Area>
+<Rectangle><Color r="0x35" g="0x57" b="0x70"/><Size w="526" h="398"/></Rectangle>
+</Elements></Panel>
+
+	<Label templateName="Small" font="Geneva:9:BOLD"/>
+	<Label templateName="SmallWhite" template="Small">
+		<Color r="0xFF" g="0xFF" b="0xFF"/>
+	</Label>
+	<Label templateName="SmallBlack" template="Small">
+		<Color r="0x00" g="0x00" b="0x00"/>
+	</Label>
+	<Label templateName="SmallYellow" template="Small">
+		<Color r="0xB8" g="0xDF" b="0xF0"/>
+	</Label>
+	<Label templateName="SmallBlue" template="Small">
+		<Color r="0x62" g="0xC9" b="0xE5"/>
+	</Label>
+
+	<Label templateName="Medium" font="New York:14:BOLD"/>
+	<Label templateName="MediumWhite" template="Medium">
+		<Color r="0xFF" g="0xFF" b="0xFF"/>
+	</Label>
+	<Label templateName="MediumYellow" template="Medium">
+		<Color r="0xB8" g="0xDF" b="0xF0"/>
+	</Label>
+	<Label templateName="MediumBlue" template="Medium">
+		<Color r="0x62" g="0xC9" b="0xE5"/>
+	</Label>
+
+	<Label templateName="Large" font="New York:18"/>
+	<Label templateName="LargeWhite" template="Large">
+		<Color r="0xFF" g="0xFF" b="0xFF"/>
+	</Label>
+	<Label templateName="LargeYellow" template="Large">
+		<Color r="0xB8" g="0xDF" b="0xF0"/>
+	</Label>
+	<Label templateName="LargeBlue" template="Large">
+		<Color r="0x62" g="0xC9" b="0xE5"/>
+	</Label>
+	<Label templateName="LargeYellowUnderline" font="New York:18:UNDERLINE">
+		<Color r="0xB8" g="0xDF" b="0xF0"/>
+	</Label>
+
+	<Button templateName="HotkeyOnly">
+		<Size w="0" h="0"/>
+	</Button>
+
+	<Button templateName="MenuButton" image="keyicon" font="Geneva:9:BOLD">
+		<Size w="32" h="32"/>
+		<TextArea>
+			<Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" x="13" y="9"/>
+		</TextArea>
+
+		<Color r="0xE6" g="0xF2" b="0xFF"/>
+	</Button>
+
+	<Button templateName="LargeMenuButton" image="mainbutton" image_corner="8" font="Geneva:14:BOLD">
+		<Size w="240" h="44"/>
+
+		<Color r="0xB8" g="0xDF" b="0xF0"/>
+	</Button>
+
+	<Rectangle templateName="ControlKeyBox">
+		<Size w="170" h="20"/>
+		<Color r="0x00" g="0x00" b="0x00"/>
+	</Rectangle>
+
+	<Area templateName="ModBox">
+		<Size w="432" h="32"/>
+		<Elements>
+			<DialogLabel name="label">
+				<Anchor anchorFrom="LEFT" anchorTo="LEFT" x="8"/>
+			</DialogLabel>
+			<DialogLabel name="name">
+				<Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" x="8" y="6"/>
+			</DialogLabel>
+			<!-- 75 character maximum description -->
+			<Label name="desc" template="SmallBlack">
+				<Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" x="8" y="22"/>
+			</Label>
+			<DialogLabel name="invalid" text="(invalid)">
+				<Anchor anchorFrom="RIGHT" anchorTo="RIGHT" x="-4"/>
+				<Color r="0xA0" g="0x10" b="0x10"/>
+			</DialogLabel>
+		</Elements>
+	</Area>
+</UITemplates>

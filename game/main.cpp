@@ -141,6 +141,7 @@ void PrintUsage(const char *progname)
 "    --control-brakes  # Allow manual brake control\n"
 "    --classic-art     # Personal edition: use original pixel-art scaling\n"
 "    --modern-art      # Personal edition: use optional modern title artwork\n"
+"    --source-sprites  # Prototype: rotate single ship/asteroid illustrations\n"
 	);
 }
 
@@ -171,8 +172,11 @@ bool IsTablet(void)
 
 /* ----------------------------------------------------------------- */
 /* -- Blitter main program */
+static Uint64 personalAppStartNS;
+static bool personalFirstMenuPending = false;
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
+    personalAppStartNS = SDL_GetTicksNS();
 	/* Command line flags */
 	int window_width = 0;
 	int window_height = 0;
@@ -209,6 +213,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 			}
 		} else if ( strcmp(argv[i], "--control-brakes") == 0 ) {
 			gControlBrakes = true;
+		} else if ( strcmp(argv[i], "--source-sprites") == 0 ) {
+			SDL_SetHint("MAELSTROM_SOURCE_SPRITES", "1");
 		} else if ( strcmp(argv[i], "--modern-art") == 0 ) {
 			SDL_SetHint("MAELSTROM_MODERN_ART", "1");
 		} else if ( strcmp(argv[i], "--classic-art") == 0 ) {
@@ -279,7 +285,11 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 		if (gInitializing) {
 			if (ContinueInitialization()) {
 				ui->Draw();
-				Delay(2);
+				// Loading is not simulation time. Keep yielding, without a historic
+				// two-tick pause after each completed modern asset batch.
+				if (SDL_GetHintBoolean("MAELSTROM_MODERN_ART", false) &&
+				    !SDL_GetHintBoolean("MAELSTROM_CLASSIC_ART", false)) { SDL_Delay(1); }
+				else { Delay(2); }
 				break;
 			} else {
 				return SDL_APP_FAILURE;
@@ -287,6 +297,10 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 		}
 
 		ui->Draw();
+		if (personalFirstMenuPending && !gInitializing && !gGameOn && !screen->Fading()) {
+			personalFirstMenuPending = false;
+			SDL_Log("PERSONAL_MENU_PRESENTED app_ms=%.3f", (SDL_GetTicksNS()-personalAppStartNS)/1000000.0);
+		}
 
 		if (!gGameOn) {
 			// If we got a replay event, start it up!
@@ -345,6 +359,7 @@ MainPanelDelegate::OnLoad()
 void
 MainPanelDelegate::OnShow()
 {
+	personalFirstMenuPending = true;
 	SetSteamTimelineMode(STEAM_TIMELINE_MENUS);
 
 	gUpdateBuffer = true;
