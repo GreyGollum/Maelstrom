@@ -1,0 +1,92 @@
+<Dialog delegate="ControlsDialog">
+	<Size w="474" h="292"/>
+	<Elements>
+		<Label font="Geneva:12:BOLD" text="KEYBOARD CONTROLS"><Color r="30" g="50" b="65"/><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" x="18" y="12"/></Label>
+<Label font="Geneva:9" text="Select an action, then press the key you want to use."><Color r="30" g="50" b="65"/><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" x="18" y="35"/></Label>
+
+		<Rectangle name="control1_box" template="ControlKeyBox">
+			<Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" x="92" y="71"/>
+		</Rectangle>
+		<DialogLabel name="control1">
+			<Anchor anchor="control1_box"/>
+		</DialogLabel>
+		<Rectangle name="control2_box" template="ControlKeyBox">
+			<Anchor anchorFrom="TOPLEFT" anchorTo="BOTTOMLEFT" anchor="control1_box" y="3"/>
+		</Rectangle>
+		<DialogLabel name="control2">
+			<Anchor anchor="control2_box"/>
+		</DialogLabel>
+		<Rectangle name="control3_box" template="ControlKeyBox">
+			<Anchor anchorFrom="TOPLEFT" anchorTo="BOTTOMLEFT" anchor="control2_box" y="3"/>
+		</Rectangle>
+		<DialogLabel name="control3">
+			<Anchor anchor="control3_box"/>
+		</DialogLabel>
+		<Rectangle name="control4_box" template="ControlKeyBox">
+			<Anchor anchorFrom="TOPLEFT" anchorTo="BOTTOMLEFT" anchor="control3_box" y="3"/>
+		</Rectangle>
+		<DialogLabel name="control4">
+			<Anchor anchor="control4_box"/>
+		</DialogLabel>
+		<Rectangle name="control5_box" template="ControlKeyBox">
+			<Anchor anchorFrom="TOPLEFT" anchorTo="BOTTOMLEFT" anchor="control4_box" y="3"/>
+		</Rectangle>
+		<DialogLabel name="control5">
+			<Anchor anchor="control5_box"/>
+		</DialogLabel>
+		<Rectangle name="control6_box" template="ControlKeyBox">
+			<Anchor anchorFrom="TOPLEFT" anchorTo="BOTTOMLEFT" anchor="control5_box" y="3"/>
+		</Rectangle>
+		<DialogLabel name="control6">
+			<Anchor anchor="control6_box"/>
+		</DialogLabel>
+		<Rectangle name="control7_box" template="ControlKeyBox">
+			<Anchor anchorFrom="TOPLEFT" anchorTo="BOTTOMLEFT" anchor="control6_box" y="3"/>
+		</Rectangle>
+		<DialogLabel name="control7">
+			<Anchor anchor="control7_box"/>
+		</DialogLabel>
+		<Rectangle name="control8_box" template="ControlKeyBox">
+			<Anchor anchorFrom="TOPLEFT" anchorTo="BOTTOMLEFT" anchor="control7_box" y="3"/>
+		</Rectangle>
+		<DialogLabel name="control8">
+			<Anchor anchor="control8_box"/>
+		</DialogLabel>
+
+		<DialogRadioGroup name="controlsRadioGroup">
+			<Elements>
+				<DialogRadioButton name="label1" id="1">
+					<Anchor anchorFrom="TOPLEFT" anchorTo="TOPRIGHT" anchor="control1_box"/>
+				</DialogRadioButton>
+				<DialogRadioButton name="label2" id="2">
+					<Anchor anchorFrom="TOPLEFT" anchorTo="TOPRIGHT" anchor="control2_box"/>
+				</DialogRadioButton>
+				<DialogRadioButton name="label3" id="3">
+					<Anchor anchorFrom="TOPLEFT" anchorTo="TOPRIGHT" anchor="control3_box"/>
+				</DialogRadioButton>
+				<DialogRadioButton name="label4" id="4">
+					<Anchor anchorFrom="TOPLEFT" anchorTo="TOPRIGHT" anchor="control4_box"/>
+				</DialogRadioButton>
+				<DialogRadioButton name="label5" id="5">
+					<Anchor anchorFrom="TOPLEFT" anchorTo="TOPRIGHT" anchor="control5_box"/>
+				</DialogRadioButton>
+				<DialogRadioButton name="label6" id="6">
+					<Anchor anchorFrom="TOPLEFT" anchorTo="TOPRIGHT" anchor="control6_box"/>
+				</DialogRadioButton>
+				<DialogRadioButton name="label7" id="7">
+					<Anchor anchorFrom="TOPLEFT" anchorTo="TOPRIGHT" anchor="control7_box"/>
+				</DialogRadioButton>
+				<DialogRadioButton name="label8" id="8">
+					<Anchor anchorFrom="TOPLEFT" anchorTo="TOPRIGHT" anchor="control8_box"/>
+				</DialogRadioButton>
+			</Elements>
+		</DialogRadioGroup>
+
+		<DialogButton name="cancelButton" text="Cancel">
+			<Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" x="291" y="265"/>
+		</DialogButton>
+		<DialogButton text="OK" id="1">
+			<Anchor anchorFrom="TOPLEFT" anchorTo="TOPRIGHT" anchor="cancelButton" x="25"/>
+		</DialogButton>
+	</Elements>
+</Dialog>

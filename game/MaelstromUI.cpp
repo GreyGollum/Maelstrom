@@ -41,6 +41,10 @@
 #include "../screenlib/UIElementThumbstick.h"
 #include "../screenlib/UIDialogButton.h"
 #include "../utils/hashtable.h"
+#include "../utils/files.h"
+
+#define STB_TRUETYPE_IMPLEMENTATION
+#include "personal-font/stb_truetype.h"
 
 struct DialogInfo {
     DialogInfo(const char *text,
@@ -221,6 +225,10 @@ MaelstromUI::MaelstromUI(FrameBuf *screen, Prefs *prefs) : UIManager(screen, pre
 
 	/* Load up our UI templates */
 	ClearLoadPath();
+    if (SDL_GetHintBoolean("MAELSTROM_MODERN_ART", false) &&
+        !SDL_GetHintBoolean("MAELSTROM_CLASSIC_ART", false) && !IsPhone()) {
+        AddLoadPath("PersonalArt/UI");
+    }
 	for (unsigned int i = gResolutionIndex; i < gResolutions.length(); ++i) {
 		char path[1024];
 
@@ -262,6 +270,98 @@ MaelstromUI::GetFont(const char *fontName, int fontSize)
 	return font;
 }
 
+// Personal edition: smooth 3x glyphs in the original logical text box.
+// Font is bundled OFL Abel, not a system font dependency. Classic stays untouched.
+static SDL_Texture *CreatePersonalText(const char *text, MFont *classicFont, Uint8 style, Uint32 color)
+{
+    struct FontBytes { unsigned char *data = NULL; ~FontBytes() { SDL_free(data); } };
+    static FontBytes fontBytes;
+    static stbtt_fontinfo font;
+    static bool attempted = false, ready = false;
+    if (!attempted) {
+        attempted = true;
+        SDL_IOStream *input = OpenRead("PersonalArt/Fonts/Abel-Regular.ttf");
+        if (input) {
+            const Sint64 size = SDL_GetIOSize(input);
+            if (size > 0 && size < 1024 * 1024) {
+                fontBytes.data = (unsigned char *)SDL_malloc((size_t)size);
+                if (fontBytes.data && SDL_ReadIO(input, fontBytes.data, (size_t)size) == (size_t)size) {
+                    ready = stbtt_InitFont(&font, fontBytes.data, 0) != 0;
+                }
+            }
+            SDL_CloseIO(input);
+        }
+    }
+    if (!ready) { return NULL; }
+    const int logicalWidth = fontserv->TextWidth(text, classicFont, style);
+    const int logicalHeight = classicFont->header->fRectHeight;
+    if (logicalWidth <= 0 || logicalWidth > 4096 || logicalHeight <= 0 || logicalHeight > 128) { return NULL; }
+    int points[4096];
+    size_t pointCount = 0;
+    const char *cursor = text;
+    size_t remaining = SDL_strlen(text);
+    Uint32 cp;
+    while ((cp = SDL_StepUTF8(&cursor, &remaining)) != 0) {
+        // Original Geneva maps this legacy copyright marker to the copyright sign.
+        if (pointCount == 0 && cp == 'c' && SDL_strncmp(text, "c1992", 5) == 0) { cp = 0xA9; }
+        if (!stbtt_FindGlyphIndex(&font, cp) && cp != ' ') { return NULL; }
+        if (pointCount == 4096) { return NULL; }
+        points[pointCount++] = cp;
+    }
+    int ascent, descent, gap;
+    stbtt_GetFontVMetrics(&font, &ascent, &descent, &gap);
+    int advanceTotal = 0;
+    for (size_t i = 0; i < pointCount; ++i) {
+        int advance, bearing;
+        stbtt_GetCodepointHMetrics(&font, points[i], &advance, &bearing);
+        advanceTotal += advance;
+        if (i + 1 < pointCount) { advanceTotal += stbtt_GetCodepointKernAdvance(&font, points[i], points[i+1]); }
+    }
+    if (!advanceTotal) { return NULL; }
+    const int density = 3, width = logicalWidth * density, height = logicalHeight * density;
+    const float sy = (float)(height - 3) / (ascent - descent);
+    const float sx = (float)(width - 2) / advanceTotal;
+    const int baseline = (int)(ascent * sy);
+    SDL_Surface *surface = SDL_CreateSurface(width, height, SDL_PIXELFORMAT_RGBA32);
+    if (!surface) { return NULL; }
+    SDL_ClearSurface(surface, 0, 0, 0, 0);
+    float pen = 1.0f;
+    for (size_t i = 0; i < pointCount; ++i) {
+        int w, h, ox, oy, advance, bearing;
+        unsigned char *bitmap = stbtt_GetCodepointBitmap(&font, sx, sy, points[i], &w, &h, &ox, &oy);
+        if (bitmap) {
+            for (int y = 0; y < h; ++y) for (int x = 0; x < w; ++x) {
+                const int px = (int)pen + ox + x, py = baseline + oy + y;
+                if (px < 0 || px >= width || py < 0 || py >= height) { continue; }
+                Uint8 *dest = (Uint8 *)surface->pixels + py * surface->pitch + px * 4;
+                dest[0] = (color >> 16) & 255; dest[1] = (color >> 8) & 255; dest[2] = color & 255;
+                dest[3] = SDL_max(dest[3], bitmap[y*w+x]);
+                if ((style & STYLE_BOLD) && px + 1 < width) {
+                    Uint8 *bold = dest + 4;
+                    bold[0] = dest[0]; bold[1] = dest[1]; bold[2] = dest[2];
+                    bold[3] = SDL_max(bold[3], bitmap[y*w+x]);
+                }
+            }
+            stbtt_FreeBitmap(bitmap, NULL);
+        }
+        stbtt_GetCodepointHMetrics(&font, points[i], &advance, &bearing);
+        pen += advance * sx;
+        if (i + 1 < pointCount) { pen += stbtt_GetCodepointKernAdvance(&font, points[i], points[i+1]) * sx; }
+    }
+    if (style & STYLE_ULINE) {
+        for (int x = 0; x < width; ++x) {
+            Uint8 *dest = (Uint8 *)surface->pixels + (height-2) * surface->pitch + x * 4;
+            dest[0] = (color >> 16) & 255; dest[1] = (color >> 8) & 255; dest[2] = color & 255; dest[3] = 255;
+        }
+    }
+    SDL_Texture *texture = screen->LoadImage(surface);
+    SDL_DestroySurface(surface);
+    if (texture) {
+        SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_LINEAR);
+        SDL_SetNumberProperty(SDL_GetTextureProperties(texture), "personal.text.scale", density);
+    }
+    return texture;
+}
 UITexture *
 MaelstromUI::CreateText(const char *text, const char *fontName, int fontSize, UIFontStyle fontStyle, Uint32 color)
 {
@@ -277,7 +377,7 @@ MaelstromUI::CreateText(const char *text, const char *fontName, int fontSize, UI
 	SDL_snprintf(key, keysize, "%s:%d:%c:%8.8x:%s", fontName, fontSize, '0'+fontStyle, color, text);
 	if (hash_find(m_strings, key, (const void**)&texture)) {
 		SDL_stack_free(key);
-		return new UITexture(texture, 1.0f);
+		return new UITexture(texture, (float)SDL_GetNumberProperty(SDL_GetTextureProperties(texture), "personal.text.scale", 1));
 	}
 
 	font = GetFont(fontName, fontSize);
@@ -301,14 +401,19 @@ MaelstromUI::CreateText(const char *text, const char *fontName, int fontSize, UI
 			break;
 	}
 
-	texture = fontserv->TextImage(text, font, style, color);
+	texture = NULL;
+    if (SDL_GetHintBoolean("MAELSTROM_MODERN_ART", false) &&
+        !SDL_GetHintBoolean("MAELSTROM_CLASSIC_ART", false)) {
+        texture = CreatePersonalText(text, font, style, color);
+    }
+    if (!texture) { texture = fontserv->TextImage(text, font, style, color); }
 	if (texture) {
 		/* Add it to our cache */
 		hash_insert(m_strings, SDL_strdup(key), texture);
 	}
 	SDL_stack_free(key);
 
-	return new UITexture(texture, 1.0f);
+	return new UITexture(texture, (float)SDL_GetNumberProperty(SDL_GetTextureProperties(texture), "personal.text.scale", 1));
 }
 
 void 

@@ -1,0 +1,1 @@
+Abel Regular by MADType / Matthew Desmond. From official google/fonts, font revision 3b99d83d2625944fc0b8bd328d793fa819b92381. Distributed under SIL Open Font License 1.1; see OFL.txt. No font modifications. Used for personal modern UI only; classic mode remains original Macintosh bitmap fonts.

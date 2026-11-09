@@ -1,0 +1,65 @@
+<Panel template="FramedPanel" delegate="AboutPanel">
+	<Elements>
+		<Area name="image"><Size w="512" h="384"/></Area>
+
+		<Label template="LargeWhite" text="FLIGHT GUIDE"><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="20" y="12"/></Label>
+<Label template="SmallWhite" text="Collect supplies. Avoid hazards. Survive the Maelstrom."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="20" y="43"/></Label>
+<Label template="MediumBlue" text="YOUR TOOLS"><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="20" y="67"/></Label>
+<Label template="MediumBlue" text="THE HAZARDS"><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="276" y="67"/></Label>
+<Label template="SmallWhite" text="Your ship: plasma cannons"><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="62" y="99"/></Label>
+<Label template="SmallWhite" text="and a force shield."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="62" y="113"/></Label>
+<Label template="SmallWhite" text="ACME supply canister."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="62" y="139"/></Label>
+<Label template="SmallWhite" text="Fly over it to collect supplies."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="62" y="153"/></Label>
+<Label template="SmallWhite" text="Shooting comet."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="62" y="179"/></Label>
+<Label template="SmallWhite" text="Shoot it for bonus points."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="62" y="193"/></Label>
+<Label template="SmallWhite" text="Multipliers."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="62" y="219"/></Label>
+<Label template="SmallWhite" text="Shoot to multiply bonus points."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="62" y="233"/></Label>
+<Label template="SmallWhite" text="Stranded recon pilot."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="62" y="259"/></Label>
+<Label template="SmallWhite" text="Fly over the pilot to rescue them."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="62" y="273"/></Label>
+<Label template="SmallWhite" text="Asteroid."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="320" y="99"/></Label>
+<Label template="SmallWhite" text="Shoot it before it hits you."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="320" y="113"/></Label>
+<Label template="SmallWhite" text="Steel asteroid."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="320" y="138"/></Label>
+<Label template="SmallWhite" text="Cannot be destroyed, but moves."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="320" y="152"/></Label>
+<Label template="SmallWhite" text="Nova."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="320" y="177"/></Label>
+<Label template="SmallWhite" text="Its explosion is devastating."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="320" y="191"/></Label>
+<Label template="SmallWhite" text="Shenobi autonomous mine."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="320" y="216"/></Label>
+<Label template="SmallWhite" text="Keep your distance."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="320" y="230"/></Label>
+<Label template="SmallWhite" text="Vortex."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="320" y="255"/></Label>
+<Label template="SmallWhite" text="Do not get pulled inside."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="320" y="269"/></Label>
+<Label template="SmallWhite" text="Shenobi fleet ship."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="320" y="294"/></Label>
+<Label template="SmallWhite" text="A dangerous enemy."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="320" y="308"/></Label>
+<Label template="SmallBlue" text="SUPPLY UPGRADES"><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="20" y="298"/></Label>
+<Label template="SmallWhite" text="Shield power, retro-thrusters,"><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="62" y="314"/></Label>
+<Label template="SmallWhite" text="long shots, triple shots,"><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="62" y="328"/></Label>
+<Label template="SmallWhite" text="machine gun shots, or luck."><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="62" y="342"/></Label>
+<Label template="SmallBlue" text="Return: credits     Any other key: menu"><Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="100" y="365"/></Label>
+<!-- Shield icon -->
+		<Icon id="137">
+			<Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="25" y="314"/>
+		</Icon>
+		<!-- Airbrakes icon -->
+		<Icon id="129">
+			<Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="41" y="314"/>
+		</Icon>
+		<!-- Longfire icon -->
+		<Icon id="136">
+			<Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="25" y="328"/>
+		</Icon>
+		<!-- Triplefire icon -->
+		<Icon id="135">
+			<Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="41" y="328"/>
+		</Icon>
+		<!-- Autofire icon -->
+		<Icon id="128">
+			<Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="25" y="342"/>
+		</Icon>
+		<!-- Lucky icon -->
+		<Icon id="133">
+			<Anchor anchorFrom="TOPLEFT" anchorTo="TOPLEFT" anchor="image" x="41" y="342"/>
+		</Icon>
+
+		<!-- Buttons -->
+		<Button hotkey="any" clickPanel="main" clickSound="106"/>
+		<Button hotkey="Return" clickPanel="about_credits" clickSound="102"/>
+	</Elements>
+</Panel>

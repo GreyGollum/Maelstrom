@@ -987,6 +987,12 @@ bool RestartInitialization()
 
 bool ContinueInitialization()
 {
+	static Uint64 personalSpritesStartNS = 0;
+	if (gLoadingStage == LOAD_STAGE_BLITS1) { personalSpritesStartNS = SDL_GetTicksNS(); }
+	if (gLoadingStage == LOAD_STAGE_SHOTS && personalSpritesStartNS) {
+		SDL_Log("PERSONAL_SPRITES_READY span_ms=%.3f crc=%08x", (SDL_GetTicksNS()-personalSpritesStartNS)/1000000.0, gSpriteCRC);
+		personalSpritesStartNS = 0;
+	}
 	switch (gLoadingStage) {
 	case LOAD_STAGE_STARTING:
 		/* -- Load in the prize CICN's */
@@ -1396,6 +1402,10 @@ static int LoadCICNS(void)
 
 static int LoadSprite(bool large, BlitPtr *theBlit, int baseID, int numFrames)
 {
+    struct PersonalSourceCacheScope {
+        PersonalSourceCacheScope() { ResetPersonalSpriteSourceCache(); }
+        ~PersonalSourceCacheScope() { ResetPersonalSpriteSourceCache(); }
+    } personalSourceCacheScope;
 	char	file[128];
 	int	size;
 	SDL_Surface *surface;
@@ -1436,6 +1446,7 @@ static int LoadSprite(bool large, BlitPtr *theBlit, int baseID, int numFrames)
 			surface = convert;
 		}
 
+		const bool originalVisualSize = surface->w == size && surface->h == size;
 		if ( surface->w != size || surface->h != size ) {
 			SDL_Surface *scaled = SDL_ScaleSurface(surface, size, size, SDL_SCALEMODE_NEAREST);
 			SDL_DestroySurface(surface);
@@ -1475,7 +1486,7 @@ static int LoadSprite(bool large, BlitPtr *theBlit, int baseID, int numFrames)
 		SetRect(&aBlit->hitRect, left, top, right, bottom);
 
 		/* Load the image */
-		aBlit->sprite[index] = GetSprite(screen, baseID+index, large);
+		aBlit->sprite[index] = GetSprite(screen, baseID+index, large, originalVisualSize ? surface : NULL);
 		if ( aBlit->sprite[index] == NULL ) {
 			error("LoadSprite(): Couldn't convert sprite image to texture for %s\n", file);
 			return(-1);
